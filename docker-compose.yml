@@ -1,0 +1,30 @@
+
+services:
+  db:
+    image: postgres:15
+    container_name: postgrest-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: mydb
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    ports:
+      - "5432:5432"
+
+  postgrest:
+    image: postgrest/postgrest
+    container_name: postgrest-api
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./postgrest.conf:/etc/postgrest.conf
+    command: ["postgrest", "/etc/postgrest.conf"]
+
+volumes:
+  db-data:
