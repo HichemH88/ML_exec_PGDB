@@ -1,5 +1,23 @@
 ﻿# ML_exec_PGDB
 sudo yum install postgresql-plpython3
+prepare your model.pkl in Postgres
+# model_create.py
+import pickle
+from sklearn.linear_model import LogisticRegression
+
+# Step 1: Prepare training data
+X = [[0, 0], [1, 1], [1, 0], [0, 1]]
+y = [0, 0, 1, 1]
+
+# Step 2: Train the model
+model = LogisticRegression()
+model.fit(X, y)
+
+# Step 3: Serialize the model to a file
+with open("model.pkl", "wb") as f:
+    pickle.dump(model, f)
+
+print("✅ model.pkl created successfully.")
 
 create extension in PG:
 CREATE EXTENSION plpython3u;
